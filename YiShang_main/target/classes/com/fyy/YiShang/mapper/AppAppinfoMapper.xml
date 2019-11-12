@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fyy.YiShang.mapper.AppAppinfoMapper">
+
+  <!-- 自定义sql -->
+  <!--<select id="selectAppByExample" parameterType="com.fyy.YiShang.domain.gen.AppAppinfoCriteria" resultMap="BaseResultMap">-->
+  <select id="selectAppByExample" parameterType="com.fyy.YiShang.domain.AppAppinfo" resultMap="BaseResultMap">
+    select
+    a.ID, a.ACCOUNT_ID, a.APP_ID, a.CREATE_TIME, a.DEL_FLAG, a.LOAN_API_HOST, a.NAME, a.SCOPE, a.SMS_SIGN,
+    a.STATUS, a.UPDATE_TIME,b.NICKNAME nickname,b.USERNAME
+    from APP_APPINFO a,APP_ACCOUNT b
+    <!--<if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>-->
+    where a.account_id=b.id
+    <if test="accountId !=null" >
+      and account_id like concat('%',#{accountId},'%')
+    </if>
+    <if test="userName !=null" >    /*这里的userName属性是vo中的*/
+      and b.username like concat('%',#{username},'%') /*这里后边的username是前端传回来的数据*/
+    </if>
+    <if test="appId !=null" >
+      and app_id like concat('%',#{appId},'%')
+    </if>
+    <if test="status !=null" >
+      and a.status = #{status}
+    </if>
+  </select>
+  <select id="selectAppByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    a.ID, a.ACCOUNT_ID, a.APP_ID, a.CREATE_TIME, a.DEL_FLAG, a.LOAN_API_HOST, a.NAME, a.SCOPE, a.SMS_SIGN,
+    a.STATUS, a.UPDATE_TIME,b.NICKNAME
+    from APP_APPINFO a,APP_ACCOUNT b
+    where ID = #{id,jdbcType=INTEGER} and a.account_id=b.id
+  </select>
+</mapper>
